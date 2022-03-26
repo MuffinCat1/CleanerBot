@@ -18,7 +18,7 @@ public class App{
         builder.setActivity(Activity.playing("Cleaning Simulator"));
         builder.setStatus(OnlineStatus.IDLE);
         
-        builder.addEventListeners(new Info(), new Stopbot(), new Clear());
+        builder.addEventListeners(new Info(), new Clear());
         builder.build();
     }
 }
