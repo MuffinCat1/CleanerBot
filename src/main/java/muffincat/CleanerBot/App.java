@@ -14,7 +14,7 @@ public class App{
     public static String prefex = "~";
 	
     public static void main(String[] args) throws LoginException{
-        JDABuilder builder = JDABuilder.createDefault("OTU2NTgxODgwNTI0ODQ5MTYy.YjyUTA.WRvtoHto78AyM2qyf42dnFWXSQY");
+        JDABuilder builder = JDABuilder.createDefault(System.getenv("TOKEN"));
         builder.setActivity(Activity.playing("Cleaning Simulator"));
         builder.setStatus(OnlineStatus.IDLE);
         
