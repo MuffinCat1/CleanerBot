@@ -19,7 +19,7 @@ public class App{
 	public static User ME;
 	
 	public static void main(String[] args) throws LoginException{
-        JDABuilder _builder = JDABuilder.createDefault("OTU2NTgxODgwNTI0ODQ5MTYy.GiUbBG.b9o9TqjdQmaEzccAtDt3D1wMplu8UavLzTFbzs");
+        JDABuilder _builder = JDABuilder.createDefault("xxxxxxxxxxxxxxxxxxxx");
         _builder.setActivity(Activity.playing("Cleaning Simulator"));
         
         _builder.setStatus(OnlineStatus.ONLINE);
