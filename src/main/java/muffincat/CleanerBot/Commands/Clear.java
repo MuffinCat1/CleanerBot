@@ -8,72 +8,76 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.exceptions.RateLimitedException;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class Clear extends ListenerAdapter{
 	@Override
-	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-		 String[] args = event.getMessage().getContentRaw().split("\\s+");
+	public void onMessageReceived(MessageReceivedEvent _event) {
+		if (!_event.isFromGuild()) return;
+		
+		String[] _args = _event.getMessage().getContentRaw().split("\\s+");
 		 
-		 Member member = event.getMember();
-		 if(member != null) {
-			if(member.getPermissions().contains(Permission.ADMINISTRATOR)) {
-				if(args[0].equalsIgnoreCase(App.prefex + "clear")) {
-					if(args.length < 2 || args.length > 2) {
-						EmbedBuilder usage = new EmbedBuilder();
-						usage.setColor(0xff3923);
-						usage.setTitle("Specify amount to delete");
-						usage.setDescription("Usage: `" + App.prefex + "clear [# of messages]`");
-					
-						event.getChannel().sendMessageEmbeds(usage.build()).queue();
-					} else { 
-						List<Message> messages;
-						try {
-							messages = event.getChannel().getHistory().retrievePast(Integer.parseInt(args[1])).complete(false);
-							event.getChannel().deleteMessages(messages).queue();
-					
-							EmbedBuilder succes = new EmbedBuilder();
-							succes.setColor(0x22ff2a);
-							succes.setTitle("✅ Succesfully deleted " + args[1] + " messages");
-						
-							event.getChannel().sendMessageEmbeds(succes.build()).queue();
+		if(_args[0].equalsIgnoreCase(App.PREFEX + "clear")) {
+			Member _member = _event.getMember();
+			
+			if(_member != null) {
 				
-						} catch (IllegalArgumentException e) {
-							if(e.toString().startsWith("java.lang.IllegalArgumentException: Message retrieval")) {	
-								EmbedBuilder error = new EmbedBuilder();
-								error.setColor(0xff3923);
-								error.setTitle("🔴 Too many messages selected");
-								error.setDescription("only messages Between 1-100 can be deleted at one time (cannot delete zero messages)");
-						
-								event.getChannel().sendMessageEmbeds(error.build()).queue();
+				if(_member.getPermissions().contains(Permission.ADMINISTRATOR)) {
 					
-							} else if(e.toString().startsWith("java.lang.NumberFormatException: For input string")){
-								EmbedBuilder error = new EmbedBuilder();
-								error.setColor(0xff3923);
-								error.setTitle("🔴 Wrong Input");
-								error.setDescription("Please put a number between 1-100");
+					if(_args.length < 2 || _args.length > 2) {
+						EmbedBuilder _usage = new EmbedBuilder();
+						_usage.setColor(0xff3923);
+						_usage.setTitle("Specify amount to delete");
+						_usage.setDescription("Usage: `" + App.PREFEX + "clear [# of messages]`");
+					
+						_event.getChannel().sendMessageEmbeds(_usage.build()).queue();
+					} else { 
+						try {
+							Message _firstMessage = _event.getMessage();
+							_event.getGuildChannel().deleteMessageById(_firstMessage.getId()).queue();
+							
+							List<Message> _messages = _event.getChannel().getHistory().retrievePast(Integer.parseInt(_args[1])).complete();
+							_event.getGuildChannel().deleteMessages(_messages).queue();
+															
+							EmbedBuilder _succes = new EmbedBuilder();
+							_succes.setColor(0x22ff2a);
+							_succes.setTitle("✅ Succesfully deleted " + _args[1] + " messages");
+								
+							_event.getChannel().sendMessageEmbeds(_succes.build()).queue();
+							
+						} catch (Exception _ex) {
+							_ex.printStackTrace();
+							EmbedBuilder _error = new EmbedBuilder();
+							
+							if(_ex.toString().startsWith("java.lang.IllegalArgumentException: Message retrieval")) {	
+								_error.setColor(0xff3923);
+								_error.setTitle("🔴 Too many messages selected");
+								_error.setDescription("only messages Between 1-100 can be deleted at one time (cannot delete 0 messages)");
 						
-								event.getChannel().sendMessageEmbeds(error.build()).queue();								
+								_event.getChannel().sendMessageEmbeds(_error.build()).queue();
+					
+							} else if(_ex.toString().startsWith("java.lang.NumberFormatException: For input string")){
+								_error.setColor(0xff3923);
+								_error.setTitle("🔴 Wrong Input");
+								_error.setDescription("Please put a number between 1-100");
+						
+								_event.getChannel().sendMessageEmbeds(_error.build()).queue();								
 							} else {
-								EmbedBuilder error = new EmbedBuilder();
-								error.setColor(0xff3923);
-								error.setTitle("🔴 Selected messages are older then two weeks");
-								error.setDescription("Messages older then two weeks cannot be deleted");
+								_error.setColor(0xff3923);
+								_error.setTitle("🔴 Selected messages are older then two weeks");
+								_error.setDescription("Messages older then two weeks cannot be deleted");
 						
-								event.getChannel().sendMessageEmbeds(error.build()).queue();
+								_event.getChannel().sendMessageEmbeds(_error.build()).queue();
 							}
 				
-						} catch (RateLimitedException e) {
-							e.printStackTrace();
-						}
+						} 
 					}
+					
+				} else {
+					_event.getChannel().sendTyping().queue();
+					_event.getChannel().sendMessage("Only Admins can use that command").queue();
 				}
-			} if(!member.getPermissions().contains(Permission.ADMINISTRATOR)) {
-				event.getChannel().sendTyping().queue();
-				event.getChannel().sendMessage("Only Admins can use that command").queue();
-			}
+			 }
 		 }
 	}
-}
