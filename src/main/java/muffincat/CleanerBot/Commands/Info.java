@@ -16,13 +16,12 @@ public class Info extends ListenerAdapter{
 		if (!_event.isFromGuild()) return;
 		
 		if(_event.getName().equals("info")) {			
-			_event.getChannel().sendTyping().queue();
-			
+
 			EmbedBuilder _info = new EmbedBuilder();
 			_info.setTitle("🧹Information");
-			_info.setDescription("A bot that can clean up to 100 messages that are two weeks old, he can't delete messages that are higher than two weeks old. You can use the `~` + "
-					+ "`clear` to clean the messages; for example `~clear 100` will clean 100 messages");
-			_info.addField("🛠️Commands","`/info` - show info on the bot\n`~clear [# of messages]` - clear a number of messages that you enter up to a 100", false);
+			_info.setDescription("A bot that can clean up to 100 messages that are two weeks old, he can't delete messages that are higher than two weeks old. You can use the `/` + "
+					+ "`clear` to clean the messages; for example `/clear 100` will clean 100 messages");
+			_info.addField("🛠️Commands","`/info` - show info on the bot\n`/clear [amount of messages]` - clear a number of messages that are in chat. up to a 100 messages per delete", false);
 			//_info.addField("⚙️Options","`noEmbed` - disables the embed message after the bot finishes deleting the messages", false); //maybe in the future 
 			_info.setColor(0xF23309);
 			
