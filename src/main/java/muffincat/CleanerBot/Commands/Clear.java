@@ -1,6 +1,7 @@
 package muffincat.CleanerBot.Commands;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
@@ -30,8 +31,11 @@ public class Clear extends ListenerAdapter{
 			Member _member = _event.getMember();
 			
 			if(_member != null) {
+								
+				EnumSet<Permission> permissions = EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND, Permission.MESSAGE_HISTORY, 
+															 Permission.MESSAGE_MANAGE, Permission.MESSAGE_SEND_IN_THREADS, Permission.USE_APPLICATION_COMMANDS);
 				
-				if(_member.getPermissions().contains(Permission.ADMINISTRATOR)) {
+				if(_member.getPermissions().containsAll(permissions)) {
 					
 					if(amountOption == null) {
 						EmbedBuilder _usage = new EmbedBuilder();
@@ -101,7 +105,7 @@ public class Clear extends ListenerAdapter{
 					}
 					
 				} else {
-					_event.getHook().sendMessage("Only Admins can use that command").queue();
+					_event.getHook().sendMessage("You don't have the permissions to use these command").queue();
 				}
 			 }
 		 }
