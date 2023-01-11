@@ -29,9 +29,5 @@ public class App{
         
         	JDA _jda = _builder.build();
        		ME = _jda.retrieveUserById(575921629465673730L).complete();
-		
-		if(_jda != null){
-			System.out.println("test workred");
-		}
 	}
 }
