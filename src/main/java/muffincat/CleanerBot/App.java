@@ -20,14 +20,18 @@ public class App{
 	public static User ME;
 	
 	public static void main(String[] args) throws LoginException{
-        JDABuilder _builder = JDABuilder.createDefault(System.getenv("T"));
-        _builder.setActivity(Activity.playing("Cleaning Simulator"));
+        	JDABuilder _builder = JDABuilder.createDefault(System.getenv("T"));
+        	_builder.setActivity(Activity.playing("Cleaning Simulator"));
         
-        _builder.setStatus(OnlineStatus.ONLINE);
-        _builder.enableIntents(EnumSet.allOf(GatewayIntent.class));
-        _builder.addEventListeners(new CommandManager(), new Info(), new Clear(), new Stopbot()); 
+        	_builder.setStatus(OnlineStatus.ONLINE);
+        	_builder.enableIntents(EnumSet.allOf(GatewayIntent.class));
+        	_builder.addEventListeners(new CommandManager(), new Info(), new Clear(), new Stopbot()); 
         
-        JDA _jda = _builder.build();
-        ME = _jda.retrieveUserById(575921629465673730L).complete();
+        	JDA _jda = _builder.build();
+       		ME = _jda.retrieveUserById(575921629465673730L).complete();
+		
+		if(_jda != null){
+			System.out.println("test workred");
+		}
 	}
 }
