@@ -28,6 +28,6 @@ public class App{
         _builder.addEventListeners(new CommandManager(), new Info(), new Clear(), new Stopbot()); 
         
         JDA _jda = _builder.build();
-        ME = _jda.retrieveUserById(user_id).complete();
+        ME = _jda.retrieveUserById(575921629465673730L).complete();
 	}
 }
